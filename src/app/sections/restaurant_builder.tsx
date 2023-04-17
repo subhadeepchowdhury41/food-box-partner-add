@@ -1,41 +1,49 @@
-"use client";
+
 
 import Button from "@/components/Button";
 import DataCard from "@/components/DataCard";
-import { useEffect, useState } from "react";
-
-interface FoodItem {
-    id: number,
-    name?: string,
-    description?: string,
-    type?: "veg" | "non-veg" | null | undefined
-}
-
-interface Counter {
-    id: number
-    name?: string
-    items: FoodItem[]
-}
+import { useFormContext } from "@/providers/form_provider";
+import { Counter, FoodItem } from "@/types/types";
+import { useState } from "react";
 
 const RestaurantBuilder = () => {
-    const [counters, setCounters] = useState<Counter[]>([]);
+    const { counters, setCounters } = useFormContext();
 
-    useEffect(() => {
-        console.log(counters);
-        
-    },[counters]);
     return (
+        <div style={{
+            backgroundColor: 'white',
+            minWidth: '600px',
+            alignSelf: 'center',
+            padding: '1em'
+        }}>
+            <div style={{
+          color: '#0e0e0e',
+          alignSelf: 'center',
+          fontWeight: 'bold',
+          fontSize: '3em',
+        }}>
+          Configure
+        </div>
+        <div style={{
+          color: '#0e0e0e',
+          fontWeight: 'lighter',
+          fontSize: '2em'
+        }}>
+          Your Restaurant
+        </div>
+        <div style={{
+          margin: '1em 0'
+        }}></div>
         <div className="my-5">
             {counters.map((counter, index) => {
                 return (<div key={index} className="my-3 p-3 rounded-sm border border-gray-600">
                     <DataCard label="Counter Name" value={counters[index].name ?? `Counter ${index+1}`} onChange={(event) => {
                         setCounters(prev => {
-                            let newCounters : Counter[] = [];
-                            prev.forEach((c) => {
+                            let newCounters = prev.map(c => {
                                 if (c.id === counter.id) {
                                     c.name = event.target.value;
                                 }
-                                newCounters.push(c);
+                                return c;
                             });
                             return newCounters;
                         });
@@ -45,26 +53,40 @@ const RestaurantBuilder = () => {
                         {<div className="m-2 justify-between">
                             <DataCard value={counters[index].items[i].name ?? `Item ${i+1}`} display="inline" label="Name" onChange={(event) => {
                                 setCounters(prev => {
-                                    let newCounters : Counter[] = [];
-                                    prev.forEach(c => {
-                                        let newItems : FoodItem[] = [];
+                                    let newCounters = prev.map(c => {
                                         if (c.id === counter.id) {
-                                            c.items.forEach(f => {
-                                                if (f.id === item.id) {
-                                                    f.name = event.target.value;
-                                                }
-                                                newItems.push(f);
-                                            });
+                                          c.items = c.items.map(f => {
+                                            if (f.id === item.id) {
+                                              f.name = event.target.value;
+                                            }
+                                            return f;
+                                          });
                                         }
-                                        newCounters.push({
-                                            ...c,
-                                            items: newItems
-                                        });
+                                        return c;
                                     })
                                     return newCounters;
                                 });
                             }} />
-                            <select name="Type" style={{
+                        <select name="Type" value={String(counters[index].items[i].type)} onChange={(event) => {
+                          setCounters(prev => {
+                            let newCounters = prev.map(c => {
+                                if (c.id === counter.id) {
+                                  c.items = c.items.map(f => {
+                                    if (f.id === item.id) {
+                                      if (event.target.value === "non-veg") {
+                                        f.type = "non-veg";
+                                      } else {
+                                        f.type = "veg";
+                                      }
+                                    }
+                                    return f;
+                                  });
+                                }
+                                return c;
+                            })
+                            return newCounters;
+                        });
+                            }} style={{
                                 margin: '0 1em',
                                 backgroundColor: '#eaeaea',
                                 lineHeight: '2.3',
@@ -75,50 +97,72 @@ const RestaurantBuilder = () => {
                                 <option value="non-veg">Non-veg</option>
                                 <option value="veg">Veg</option>
                             </select>
-                            <Button label="Delete" onClick={() => {
-                                setCounters(prev => {
-                                    let newCounters: Counter[] = [];
-                                    prev.forEach((c, i) => {
-                                        // if (c.id === counter.id) {
-                                        //     newCounters.push(counter.items.filter(f => f.id != item.id));
-                                        // } else {
-                                            
-                                        // }
-                                    })
-                                    prev[index].items = prev[index].items.filter(f => f.id !== item.id);
-                                    return prev;
-                                });
-                            }}/>
+                        <Button label="Delete" onClick={() => {
+                          setCounters(prev => {
+                            return prev.map(c => {
+                              if (c.id === counter.id) {
+                                c.items = c.items.filter(f => (f.id !== item.id));
+                                c.items.map((f, i) => f.id = i);
+                              }
+                              return c;
+                            });
+                          });
+                            
+                          }}/>
                             
                         </div>}
-                        <DataCard value={item.description} multiline label="Description" onChange={() => {}} />
+                        <DataCard value={counters[index].items[i].description} multiline label="Description" onChange={(event) => {
+                            setCounters(prev => {
+                              let newCounters = prev.map(c => {
+                                  if (c.id === counter.id) {
+                                    c.items = c.items.map(f => {
+                                      if (f.id === item.id) {
+                                        f.description = event.target.value;
+                                      }
+                                      return f;
+                                    });
+                                  }
+                                  return c;
+                              })
+                              return newCounters;
+                          });
+                        }} />
                     </div>))}
                     </div>
                         
                     <div className="m-6"/>
                     <Button label="Delete Counter" onClick={() => {
                         setCounters(
-                            prev => {
-                                let newList = prev.filter(
-                                    counter => counter.id != counters[index].id
-                                );
-                                newList.map((c, i) => c.id = i);
-                                return newList
-                            }
+                            prev => prev.filter(c => c.id !== counter.id)
                         );
                         }} />
                     <div className="inline m-2"/>
                     <Button label="Add Food Item" onClick={() => {
                         setCounters(
-                            prev => prev.map((c, j) => {
-                                if (c.id === counters[index].id) {
-                                    c.items.push({
-                                        id: counters[index].items.length,
-                                    });
-                                }
-                                return c;
-                            })
+                          prev => {
+                            let newCounters: Counter[] = [];
+                            prev.forEach(c => {
+                              if (c.id === counter.id) {
+                                c.items.push({
+                                  id: c.items.length
+                                });
+                              }
+                              newCounters.push(c);
+                              console.log(newCounters);
+                              
+                            });
+                            return newCounters;
+                          }
                         );
+                    // setCounters(prev => {
+
+                    //   let newCounters = prev;
+                    //   newCounters[index].items.push({
+                    //     id: counter.items.length
+                    //   })
+                    //   return newCounters;
+                    //   }
+                    // )
                     }}/>
                 </div>)
             })}
@@ -129,6 +173,7 @@ const RestaurantBuilder = () => {
                     items: []
                 }]);
             }}/>
+            </div>
             </div>
         </div>
     );

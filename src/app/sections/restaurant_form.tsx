@@ -1,29 +1,13 @@
-"use client";
+'use client';
 
 import FileInput from '@/components/FileInput';
 import DataCard from '@/components/DataCard';
-import { useEffect, useState } from 'react';
-import RestaurantBuilder from './restaurant_builder';
-import Button from '@/components/Button';
-
-type stage = "form" | "builder";
+import { useFormContext } from '@/providers/form_provider';
 
 const RestaurantForm = () => {
-  const [stage, setStage] = useState<stage>("form");
-  const [form, setForm] = useState({
-        name: "",
-        phone: "",
-        description: "",
-        email: "",
-        license: "",
-        address: ""
-  });
-    useEffect(() => {
-      console.log(form);
-    }, [
-      form
-    ]);
-  return (<div style={{
+  const { form, setForm } = useFormContext();
+  return (
+    <div style={{
         backgroundColor: 'white',
         minWidth: '600px',
         alignSelf: 'center',
@@ -44,7 +28,7 @@ const RestaurantForm = () => {
         }}>
           To become a Partner
         </div>
-        { stage === "form" ? <div style={{
+        <div style={{
           margin: '1em 0'
         }}>
           <DataCard label='Name' value={form.name} onChange={(event) => {
@@ -62,20 +46,20 @@ const RestaurantForm = () => {
           <DataCard label='Email' value={form.email} onChange={(event) => {
             setForm(prev => ({...prev, email: event.target.value}));
           }}/>
-          <FileInput label='License' value={form.license}/>
-        </div> : <RestaurantBuilder/>}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'end'
-      }}>
-        {stage === "builder" ? <Button onClick={e => {
-            setStage("form");
-          }}
-          label="Prev"/> : null}
-          <Button label="Next" onClick={() => {
-            setStage("builder");
+        <FileInput label='License' value={form.license?.name ?? ''} onChange={(event) => {
+          setForm(prev => ({...prev, license: event.target.files![0]}));
+          }}/>
+        <FileInput label='FSSAI License' value={form.fssai_license?.name ?? ''}  onChange={(event) => {
+          setForm(prev => ({...prev, fssai_license: event.target.files![0]}));
+          }}/>
+          <FileInput label='Water Certification'  value={form.water_certificate?.name ?? ''}  onChange={(event) => {
+          setForm(prev => ({...prev, water_certificate: event.target.files![0]}));
+          }}/>
+        <FileInput label='Labour License' value={form.labour_license?.name ?? ''}  onChange={(event) => {
+          setForm(prev => ({...prev, labour_license: event.target.files![0]}));
           }}/>
         </div>
+        
       </div>);
 }
 

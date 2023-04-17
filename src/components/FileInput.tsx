@@ -1,11 +1,13 @@
+import { ChangeEventHandler } from "react";
+
 const FileInput = ({
-    label,
-    value,
-    multiline
-  }: {
+  label,
+  value,
+  onChange
+}: {
+    value: string,
     label: string,
-    value?: string,
-    multiline?: Boolean
+    onChange: ChangeEventHandler<HTMLInputElement>
   }) => {
     return (
       <div style={{
@@ -21,7 +23,7 @@ const FileInput = ({
       }}>
         {label}
       </label>
-      <input type='file'/>
+      <input type='file' onChange={onChange}/>
     </div>);
 }
 
