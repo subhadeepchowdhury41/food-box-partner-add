@@ -10,6 +10,7 @@ export const sendPartnerJoinRequest = async ({
   form: FormType,
   counters: Counter[]
   }) => {
+  console.log(counters);
   const formBody = new FormData();
   formBody.append("name", form.name);
   formBody.append("description", form.description);
