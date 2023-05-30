@@ -154,15 +154,6 @@ const RestaurantBuilder = () => {
                             return newCounters;
                           }
                         );
-                    // setCounters(prev => {
-
-                    //   let newCounters = prev;
-                    //   newCounters[index].items.push({
-                    //     id: counter.items.length
-                    //   })
-                    //   return newCounters;
-                    //   }
-                    // )
                     }}/>
                 </div>)
             })}

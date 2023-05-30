@@ -1,7 +1,6 @@
 import { FormType, Counter } from "@/types/types";
-import axios from "axios"
 
-const _BASE_URL = "https://freshfoods.cehpoint.com";
+const _BASE_URL = "http://ec2-54-242-60-222.compute-1.amazonaws.com:3000";
 
 export const sendPartnerJoinRequest = async ({
   form,
@@ -23,12 +22,15 @@ export const sendPartnerJoinRequest = async ({
   formBody.append("water_certificate", form.water_certificate!.toString());
   formBody.append("details", JSON.stringify(counters));
 
-  await axios.post(`${_BASE_URL}/partner-req`, formBody, {
+  await fetch(`${_BASE_URL}/partner-req`, {
+    body: formBody,
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(res => {
-    console.log(res.data);
+      "Content-Type": "multiport/form"
+    }}
+  ).then(async res => {
+    console.log('Status: ', res.status);
+    console.log('Body', await res.json());
     alert('Request sent successfully!');
   }).catch(err => {
     alert(err);
