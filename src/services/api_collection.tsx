@@ -1,6 +1,6 @@
 import { FormType, Counter } from "@/types/types";
 
-const _BASE_URL = "http://ec2-54-242-60-222.compute-1.amazonaws.com:3000";
+const _BASE_URL = "https://freshfoods.cehpoint.co.in";
 
 export const sendPartnerJoinRequest = async ({
   form,
