@@ -31,8 +31,8 @@ export const sendPartnerJoinRequest = async ({
   ).then(async res => {
     console.log('Status: ', res.status);
     console.log('Body', await res.json());
-    alert('Request sent successfully!');
+    // alert('Request sent successfully!');
   }).catch(err => {
-    alert(err);
+    // alert(err);
   });
 }
