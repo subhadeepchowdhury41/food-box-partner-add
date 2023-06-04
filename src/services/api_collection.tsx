@@ -26,7 +26,7 @@ export const sendPartnerJoinRequest = async ({
     body: formBody,
     method: 'POST',
     headers: {
-      "Content-Type": "multiport/form"
+      "Content-Type": "multipart/form"
     }}
   ).then(async res => {
     console.log('Status: ', res.status);
