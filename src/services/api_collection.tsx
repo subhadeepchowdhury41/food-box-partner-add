@@ -25,6 +25,7 @@ export const sendPartnerJoinRequest = async ({
   await fetch(`${_BASE_URL}/partner-req`, {
     body: formBody,
     method: 'POST',
+    mode: 'no-cors',
     headers: {
       "Content-Type": "multipart/form"
     }}
