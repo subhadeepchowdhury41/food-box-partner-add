@@ -6,7 +6,7 @@ import RestaurantBuilder from "./sections/restaurant_builder";
 import RestaurantForm from "./sections/restaurant_form";
 
 export default function Home() {
-  const { stage, setStage, sendJoiningRequest } = useFormContext();
+  const { form, stage, setStage, sendJoiningRequest } = useFormContext();
   return (
     <>
     <div style={{
@@ -32,8 +32,12 @@ export default function Home() {
             setStage("form");
           }}
           label="Prev"/> : null}
-          {stage === "form" ? <Button label="Next" onClick={() => {
+        {stage === "form" ? <Button label="Next" onClick={() => {
+          if (form.labour_license && form.fssai_license && form.water_certificate && form.license) {
             setStage("builder");
+            return;
+          }
+          alert('Please uplaod all the files');
         }} /> : <Button label="Submit" onClick={async () => {
             await sendJoiningRequest();
           }}/>}

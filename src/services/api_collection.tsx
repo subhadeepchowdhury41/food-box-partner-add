@@ -16,10 +16,10 @@ export const sendPartnerJoinRequest = async ({
   formBody.append("phone", form.phone);
   formBody.append("address", form.address);
   formBody.append("email", form.email);
-  formBody.append("license", form.license!.toString());
-  formBody.append("labour_license", form.labour_license!.toString());
-  formBody.append("fssai_license", form.labour_license!.toString());
-  formBody.append("water_certificate", form.water_certificate!.toString());
+  formBody.append("license", form.license!);
+  formBody.append("labour_license", form.labour_license!);
+  formBody.append("fssai_license", form.labour_license!);
+  formBody.append("water_certificate", form.water_certificate!);
   formBody.append("details", JSON.stringify(counters));
 
   await fetch(`${_BASE_URL}/partner-req`, {
@@ -31,8 +31,7 @@ export const sendPartnerJoinRequest = async ({
     }}
   ).then(async res => {
     console.log('Status: ', res.status);
-    console.log('Body', await res.json());
-    // alert('Request sent successfully!');
+    alert('Request sent successfully!');
   }).catch(err => {
     // alert(err);
   });

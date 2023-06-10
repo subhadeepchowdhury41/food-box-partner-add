@@ -46,16 +46,20 @@ const RestaurantForm = () => {
           <DataCard label='Email' value={form.email} onChange={(event) => {
             setForm(prev => ({...prev, email: event.target.value}));
           }}/>
-        <FileInput label='License' value={form.license?.name ?? ''} onChange={(event) => {
+        <FileInput key='1' label='License' onChange={(event) => {
+          console.log(event.target.files![0]);
           setForm(prev => ({...prev, license: event.target.files![0]}));
           }}/>
-        <FileInput label='FSSAI License' value={form.fssai_license?.name ?? ''}  onChange={(event) => {
+        <FileInput key='2' label='FSSAI License' onChange={(event) => {
+          console.log(event.target.files![0]);
           setForm(prev => ({...prev, fssai_license: event.target.files![0]}));
           }}/>
-          <FileInput label='Water Certification'  value={form.water_certificate?.name ?? ''}  onChange={(event) => {
+        <FileInput key='3' label='Water Certification' onChange={(event) => {
+          console.log(event.target.files![0]);
           setForm(prev => ({...prev, water_certificate: event.target.files![0]}));
           }}/>
-        <FileInput label='Labour License' value={form.labour_license?.name ?? ''}  onChange={(event) => {
+        <FileInput key='4' label='Labour License' onChange={(event) => {
+          console.log(event.target.files![0]);
           setForm(prev => ({...prev, labour_license: event.target.files![0]}));
           }}/>
         </div>
